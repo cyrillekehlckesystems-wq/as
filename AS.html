@@ -413,7 +413,7 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
-let l_release = "0.25";
+let l_release = "0.26";
 
 const c_yearSubscription = 2027;
 const c_singlePrice = 233;
@@ -1465,15 +1465,47 @@ function f_buildHtml() {
       </tr>`;
   }
   
-  const c_internalRegulations = document.getElementById("i_internalRegulations").checked;
-  console.log(" - c_internalRegulations " + c_internalRegulations);
-  const c_imageRight = document.getElementById("i_imageRights").checked;
-  const c_personalData = document.getElementById("i_personalData").checked;
-  const c_caution = document.getElementById("i_caution").checked;
-  const c_radioWhattsappNok = document.getElementById("i_radioWhattsappNok").checked;
-  const c_radioWhattsappOk = document.getElementById("i_radioWhattsappOk").checked;
-  const c_signature = document.getElementById("i_signature").checked;
-  
+	const c_internalRegulations = document.getElementById("i_internalRegulations").checked;
+	let v_internalRegulations = (c_internalRegulations) ?`
+		<tr style="background-color:${bg};">
+			<td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;"><input type="checkbox" checked> Je confirme avoir pris connaissance du règlement intérieur et je m'engage à le respecter.</td>
+		</tr>` : ``;
+		
+	const c_imageRight = document.getElementById("i_imageRights").checked;
+	let v_imageRight = (c_imageRight) ?`
+		<tr style="background-color:${bg};">
+			<td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;"><input type="checkbox" checked> Je confirme avoir pris connaissance du droit à l'image et m'engage à le respecter.</td>
+		</tr>` : ``;
+		
+	const c_personalData = document.getElementById("i_personalData").checked;
+	let v_personalData = (c_personalData) ?`
+		<tr style="background-color:${bg};">
+			<td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;"><input type="checkbox" checked> Je confirme avoir pris connaissance de la gestion des données personnelles.</td>
+		</tr>` : ``;	
+		
+	const c_caution = document.getElementById("i_caution").checked;
+	let v_caution = (c_caution) ?`
+		<tr style="background-color:${bg};">
+			<td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;"><input type="checkbox" checked> Je confirme avoir pris connaissance des modalités liées à la caution pour une clé de casier..</td>
+		</tr>` : ``;	
+		
+	const c_radioWhattsappNok = document.getElementById("i_radioWhattsappNok").checked;
+	let v_radioWhattsappNok = (c_radioWhattsappNok) ?`
+		<tr style="background-color:${bg};">
+			<td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;"><input type="checkbox" checked> Je ne souhaite pas participer aux groupes WhatsApp.</td>
+		</tr>` : ``;	
+		
+	const c_radioWhattsappOk = document.getElementById("i_radioWhattsappOk").checked;
+	let v_radioWhattsappOk = (c_radioWhattsappOk) ?`
+		<tr style="background-color:${bg};">
+			<td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;"><input type="checkbox" checked> Je souhaite participer aux groupes WhatsApp.</td>
+		</tr>` : ``;	
+		
+	const c_signature = document.getElementById("i_signature").checked;
+ 	let v_signature = (c_signature) ?`
+		<tr style="background-color:${bg};">
+			<td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;"><input type="checkbox" checked>  je valide et signe ma demande d'adhésion et ses composantes.</td>
+		</tr>` : ``;	 
   
 
   // --- Construction de l'email complet ---
@@ -1554,7 +1586,10 @@ function f_buildHtml() {
               </table>
             </td>
           </tr>
-			${f_buildEngagementsHtml()}
+		  ${v_personalData}
+		  ${v_internalRegulations}
+		  ${v_radioWhattsappOk}
+		  ${v_radioWhattsappNok}
           <!-- PIED DE PAGE -->
           <tr>
             <td style="background-color:#f7f9fb;padding:18px 30px;border-top:1px solid #e0e0e0;text-align:center;">
