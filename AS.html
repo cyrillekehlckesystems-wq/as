@@ -53,7 +53,7 @@
 						<td class="address" style="width:200px">
 							<img src="logo.png" /><br>
 							Sentier des bois des Monts Frais<br>
-							95130 Franconville la Garenne (r0.10)
+							95130 Franconville la Garenne (r0.11)
 						</td>
 						<td class="noborder" style="width:800px">
 							<br>
@@ -403,7 +403,9 @@
 			<button onclick="f_closeModalPrices()">Fermer</button>
 		</div>
 <script type="text/javascript" type="module" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<script type="text/javascript" type="module" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 <script type="text/javascript">
 let v_mode = 'add';
 let v_modeOptions = 'add';
@@ -1395,53 +1397,46 @@ function f_disableButtons(c_object){
 
 
 function f_generatePDF() {
-	console.log("[f_generatePDF]");
-  const doc = new window.jspdf.jsPDF();
+  console.log("[f_generatePDF]");
 
-  let y = 10;
+  // Élément à capturer : ici tout le body, ou un conteneur précis
+  const element = document.body;
 
-  doc.setFontSize(14);
-  doc.text("Bulletin d'adhésion Air et Soleil", 10, y);
-  y += 10;
+  return html2canvas(element, {
+    scale: 2,          // meilleure résolution
+    useCORS: true      // pour les images externes
+  }).then((canvas) => {
+    const imgData = canvas.toDataURL("image/png");
 
-  const table = document.getElementById("t_bodyMembers");
-  const nbRows = table.rows.length - 1;
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF("p", "mm", "a4");
 
-  for (let i = 0; i < nbRows; i++) {
-    const cells = table.rows[i].cells;
+    const pdfWidth = doc.internal.pageSize.getWidth();
+    const pdfHeight = doc.internal.pageSize.getHeight();
 
-    doc.setFontSize(10);
-    doc.text(
-      cells[2].textContent + " " +
-      cells[3].textContent + " - " +
-      cells[9].textContent,
-      10,
-      y
-    );
+    // Dimensions de l'image rapportées à la largeur de la page
+    const imgWidth = pdfWidth;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-    y += 6;
-  }
+    let heightLeft = imgHeight;
+    let position = 0;
 
-  y += 10;
+    // Première page
+    doc.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+    heightLeft -= pdfHeight;
 
-  const total = document.getElementById("t_totalPrice").textContent;
-  doc.setFontSize(12);
-  doc.text("Total : " + total, 10, y);
+    // Pages supplémentaires si le contenu dépasse une page
+    while (heightLeft > 0) {
+      position -= pdfHeight;
+      doc.addPage();
+      doc.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pdfHeight;
+    }
 
-  return doc.output("blob");
+    return doc.output("blob");
+  });
 }
 
-
-function f_getFirstEmail() {
-	console.log("[f_getFirstEmail]");
-  const table = document.getElementById("t_bodyMembers");
-
-  if (table.rows.length > 1) {
-    return table.rows[0].cells[9].textContent;
-  }
-
-  return "";
-}
 
 
 //emailjs.init("2guZj7PKd8GsJG4no");
@@ -1449,38 +1444,36 @@ function f_getFirstEmail() {
 function f_sendEmail() {
   console.log("[f_sendEmail()]");
 
-  const pdfBlob = f_generatePDF();
-  const firstEmail = f_getFirstEmail();
+  f_generatePDF().then((pdfBlob) => {
+    const firstEmail = f_getFirstEmail();
+    const reader = new FileReader();
 
-  const reader = new FileReader();
+    reader.onload = function() {
+      const base64PDF = reader.result.split(',')[1];
 
-  reader.onload = function() {
-    const base64PDF = reader.result.split(',')[1];   // nom de variable valide
+      const templateParams = {
+        to_email: "cyrille.kehl@gmail.com",
+        user_email: firstEmail,
+        message: "Nouvelle demande d'adhésion",
+        attachement: base64PDF
+      };
 
-    const templateParams = {
-      to_email: "cyrille.kehl@gmail.com",
-      user_email: firstEmail,
-      message: "Nouvelle demande d'adhésion",
-      attachement: base64PDF   // clé identique au Parameter Name du template
+      emailjs.init("2guZj7PKd8GsJG4no");
+      emailjs.send("service_s5kskmc", "template_qkyeghb", templateParams)
+        .then(() => alert("✅ Email envoyé avec succès !"))
+        .catch((error) => {
+          alert("❌ Erreur lors de l'envoi");
+          console.log(error);
+        });
     };
 
-    emailjs.init("2guZj7PKd8GsJG4no");
-    emailjs.send(
-      "service_s5kskmc",
-      "template_qkyeghb",
-      templateParams
-    )
-    .then(() => {
-      alert("✅ Email envoyé avec succès !");
-    })
-    .catch((error) => {
-      alert("❌ Erreur lors de l'envoi");
-      console.log(error);
-    });
-  };
-
-  reader.readAsDataURL(pdfBlob);
+    reader.readAsDataURL(pdfBlob);
+  })
+  .catch((error) => {
+    console.error("Erreur génération PDF:", error);
+  });
 }
+
 
 
 
