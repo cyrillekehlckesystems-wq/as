@@ -413,7 +413,7 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
-let l_release = "0.28";
+let l_release = "2026.0.29";
 
 const c_yearSubscription = 2027;
 const c_singlePrice = 233;
@@ -1223,7 +1223,7 @@ function f_valideArticles(){
 		document.getElementById("i_imageRights").required = false;
 		document.getElementById("b_addOption").required = false;
 	}
-	var v_caution = f_countElement('t_bodyArticles',"Redevance pour un casier",1)
+	var v_caution = f_countElement('t_bodyArticles',"Caution pour un casier",1)
 	console.log("v_caution : " + v_caution);
 	if(v_caution>0){
 		document.getElementById("d_caution").style.display = 'block';
@@ -1590,12 +1590,8 @@ function f_buildHtml() {
 		  <!-- CONSENTEMENTS -->
           <tr>
             <td style="padding:20px 30px 0;">
-              <p style="margin:0;font-size:14px;color:#555;">
-                <strong style="color:#4AACC6;">Consentement (ou pas) :</strong> ${requestLabel}
-              </p>
-            </td>
-          </tr>
-			<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+              <h3 style="margin:0 0 10px;color:#333;font-size:16px;">Consentement (ou pas)</h3>
+				<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
 			  ${v_personalData}
 			  ${v_internalRegulations}
 			  ${v_radioWhattsappOk}
