@@ -1455,16 +1455,16 @@ function f_sendEmail() {
   const reader = new FileReader();
 
   reader.onload = function() {
-    const adhesion.pdf = reader.result.split(',')[1];
+    const base64PDF = reader.result.split(',')[1];   // nom de variable valide
 
     const templateParams = {
       to_email: "cyrille.kehl@gmail.com",
       user_email: firstEmail,
       message: "Nouvelle demande d'adhésion",
-      attachment: adhesion.pdf
+      attachement: base64PDF   // clé identique au Parameter Name du template
     };
-	
-	emailjs.init("2guZj7PKd8GsJG4no");
+
+    emailjs.init("2guZj7PKd8GsJG4no");
     emailjs.send(
       "service_s5kskmc",
       "template_qkyeghb",
@@ -1481,6 +1481,7 @@ function f_sendEmail() {
 
   reader.readAsDataURL(pdfBlob);
 }
+
 
 
 
