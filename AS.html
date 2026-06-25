@@ -53,7 +53,7 @@
 						<td class="address" style="width:200px">
 							<img src="logo.png" /><br>
 							Sentier des bois des Monts Frais<br>
-							95130 Franconville la Garenne (r0.12)
+							95130 Franconville la Garenne (r0.13)
 						</td>
 						<td class="noborder" style="width:800px">
 							<br>
@@ -1417,7 +1417,7 @@ function f_generatePDF() {
   const element = document.body;
 
   return html2canvas(element, {
-    scale: 2,          // meilleure résolution
+    scale: 1,          // meilleure résolution
     useCORS: true      // pour les images externes
   }).then((canvas) => {
     const imgData = canvas.toDataURL("image/png");
