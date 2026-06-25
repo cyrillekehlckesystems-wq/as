@@ -27,6 +27,7 @@
 			label.title {font-weight: bold; font-size: 25px; font-family: Comic Sans MS; text-align:center;}
 			label.as {font-weight: bold; font-size: 40px; font-family: Arial; text-align:center;}
 			label.cnfc {font-weight: bold; font-size: 20px; font-family: Comic Sans MS; color: gray; text-align:center;}
+			label.release {font-weight: bold; font-size: 10px; font-family: Arial; text-align:center;}
 			select.request {font-size: 16px; font-family: lora, sans-serif;}
 			button.buttonproperties {font-size: 16px; font-family: lora, sans-serif;}
 			input.inputproperties {font-size: 16px; font-family: lora, sans-serif;}
@@ -53,13 +54,14 @@
 						<td class="address" style="width:200px">
 							<img src="logo2.png" /><br>
 							Sentier des bois des Monts Frais<br>
-							95130 Franconville la Garenne (r0.21)
+							95130 Franconville la Garenne
 						</td>
 						<td class="noborder" style="width:800px">
 							<br>
 							<label class="as">Association Air et Soleil</label><br><br>
 							<label class="cnfc">Club Naturiste Familial et Convivial</label><br><br>
 							<label id="l_title" class="title"></label><br><br>
+							<label id="l_release" class="release"></label><br><br>
 						</td>		
 					</tr>
 				</table>
@@ -411,6 +413,7 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
+let l_release = "0.22";
 
 const c_yearSubscription = 2027;
 const c_singlePrice = 233;
@@ -423,7 +426,7 @@ const c_cautionPrice = 10;
 let v_newBoxPrice = c_boxPrice + c_cautionPrice;
 
 document.getElementById("l_title").innerHTML = "<b>Bulletin d'Adhésion Année " + c_yearSubscription + "</b>";
-
+document.getElementById("l_release").innerHTML = "version  " + l_release ;
 document.getElementById("l_info01").innerHTML = "Objet : <b>ADHESION " + c_yearSubscription + "</b>";
 document.getElementById("l_info02").innerHTML = "<b>Comptant ou en plusieurs fois</b> avant le 30 avril " + c_yearSubscription + " pour un <b>renouvellement</b>,";
 
@@ -1434,6 +1437,7 @@ function f_buildHtml() {
       <tr style="background-color:${bg};">
         <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;">${c[1].textContent}</td>
         <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;">${c[2].textContent} ${c[3].textContent}</td>
+		<td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;">${c[4].textContent}</td>
         <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;text-align:center;">${c[5].textContent}</td>
         <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#666;">${c[6].textContent}, ${c[7].textContent} ${c[8].textContent}</td>
         <td style="padding:6px;border:1px solid #cccccc;font-size:12px;color:#333;">${c[9].textContent}</td>
@@ -1496,6 +1500,7 @@ function f_buildHtml() {
                   <tr style="background-color:#4AACC6;color:#ffffff;">
                     <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:left;">Statut</th>
                     <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:left;">Nom Prénom</th>
+					<th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:left;">sexe/Genre</th>
                     <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:center;">Naissance</th>
                     <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:left;">Adresse</th>
                     <th style="padding:8px;border:1px solid #4AACC6;font-size:12px;text-align:left;">E-mail</th>
@@ -1538,7 +1543,7 @@ function f_buildHtml() {
               </table>
             </td>
           </tr>
-
+			${f_buildEngagementsHtml()}
           <!-- PIED DE PAGE -->
           <tr>
             <td style="background-color:#f7f9fb;padding:18px 30px;border-top:1px solid #e0e0e0;text-align:center;">
@@ -1693,13 +1698,12 @@ function f_sendEmail() {
   console.log("[f_sendEmail()]");
 
   const firstEmail = f_getFirstEmail();
-  var v_buildEmailhtml = f_buildHtml() + f_buildEngagementsHtml();
 
   const templateParams = {
     to_email: "cyrille.kehl@gmail.com",
     user_email: firstEmail,
     message: "Nouvelle demande d'adhésion",
-    html_content: v_buildEmailhtml
+    html_content: f_buildHtml
   };
 
   emailjs.init("2guZj7PKd8GsJG4no");
