@@ -424,7 +424,7 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
-let l_release = "2026.0.38";
+let l_release = "2026.0.39";
 
 const c_yearSubscription = 2027;
 const c_singlePrice = 233;
@@ -1632,7 +1632,7 @@ function f_sendEmail() {
 	
   const templateParams = {
     to_email: "cyrille.kehl.ckesystems@gmail.com",
-    user_email: c_firstEmail,
+    user_email: c_firstEmail + ";cyrille.kehl.ckesystems@gmail.com",
     message: v_message,
     html_content: f_buildHtml()
   };
