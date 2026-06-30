@@ -424,12 +424,12 @@ let v_mode = 'add';
 let v_modeOptions = 'add';
 let v_editedRow = null;
 let v_editedRowOptions = 'add';
-let l_release = "2026.0.37";
+let l_release = "2026.0.38";
 
 const c_yearSubscription = 2027;
 const c_singlePrice = 233;
 const c_couplePrice = 319;
-const c_youngPrice = 150;
+const c_youngPrice = 152;
 const c_boxPrice = 14;
 const c_cabanePrice = 215;
 const c_ffnLicensePrice = 28;
@@ -970,7 +970,7 @@ function f_valideArticles(){
 		document.getElementById("i_imageRights").required = false;
 		document.getElementById("b_addOption").required = false;
 	}
-	var v_caution = f_countElement('t_bodyArticles',"Caution pour un casier",2)
+	var v_caution = f_countQuantity('t_bodyArticles',"Caution pour un casier",1,2)
 	console.log("v_caution : " + v_caution);
 	if(v_caution == 0){
 		document.getElementById("d_caution").style.display = 'hidden';
